@@ -1,0 +1,34 @@
+fn (%Input: Tensor[(1, 3, 64, 64), float32], %tf_net/conv2d/Conv2D/ReadVariableOp/resource: Tensor[(3, 3, 3, 64), float32], %tf_net/conv2d/BiasAdd/ReadVariableOp/resource: Tensor[(64), float32], %tf_net/conv2d_1/Conv2D/ReadVariableOp/resource: Tensor[(3, 3, 64, 64), float32], %tf_net/conv2d_1/BiasAdd/ReadVariableOp/resource: Tensor[(64), float32], %tf_net/conv2d_2/Conv2D/ReadVariableOp/resource: Tensor[(3, 3, 64, 64), float32], %tf_net/conv2d_2/BiasAdd/ReadVariableOp/resource: Tensor[(64), float32], %tf_net/conv2d_3/Conv2D/ReadVariableOp/resource: Tensor[(3, 3, 64, 64), float32], %tf_net/conv2d_3/BiasAdd/ReadVariableOp/resource: Tensor[(64), float32], %tf_net/conv2d_4/Conv2D/ReadVariableOp/resource: Tensor[(3, 3, 64, 3), float32], %tf_net/conv2d_4/BiasAdd/ReadVariableOp/resource: Tensor[(3), float32]) -> Tensor[(1, 3, 128, 128), float32] {
+  %0 = transpose(%Input, axes=[0, 2, 3, 1]) /* ty=Tensor[(1, 64, 64, 3), float32] */;
+  %1 = image.resize(%0, size=[128, 128], layout="NHWC", method="nearest_neighbor", coordinate_transformation_mode="asymmetric") /* ty=Tensor[(1, 128, 128, 3), float32] */;
+  %2 = transpose(%1, axes=[0, 3, 1, 2]) /* ty=Tensor[(1, 3, 128, 128), float32] */;
+  %3 = transpose(%tf_net/conv2d/Conv2D/ReadVariableOp/resource, axes=[3, 2, 0, 1]) /* ty=Tensor[(64, 3, 3, 3), float32] */;
+  %4 = nn.conv2d(%Input, %3, padding=[1, 1, 1, 1], channels=64, kernel_size=[3, 3]) /* ty=Tensor[(1, 64, 64, 64), float32] */;
+  %5 = reshape(%tf_net/conv2d/BiasAdd/ReadVariableOp/resource, newshape=[1, -1, 1, 1]) /* ty=Tensor[(1, 64, 1, 1), float32] */;
+  %6 = add(%4, %5) /* ty=Tensor[(1, 64, 64, 64), float32] */;
+  %7 = nn.relu(%6) /* ty=Tensor[(1, 64, 64, 64), float32] */;
+  %8 = transpose(%tf_net/conv2d_1/Conv2D/ReadVariableOp/resource, axes=[3, 2, 0, 1]) /* ty=Tensor[(64, 64, 3, 3), float32] */;
+  %9 = nn.conv2d(%7, %8, padding=[1, 1, 1, 1], channels=64, kernel_size=[3, 3]) /* ty=Tensor[(1, 64, 64, 64), float32] */;
+  %10 = reshape(%tf_net/conv2d_1/BiasAdd/ReadVariableOp/resource, newshape=[1, -1, 1, 1]) /* ty=Tensor[(1, 64, 1, 1), float32] */;
+  %11 = add(%9, %10) /* ty=Tensor[(1, 64, 64, 64), float32] */;
+  %12 = nn.relu(%11) /* ty=Tensor[(1, 64, 64, 64), float32] */;
+  %13 = transpose(%tf_net/conv2d_2/Conv2D/ReadVariableOp/resource, axes=[3, 2, 0, 1]) /* ty=Tensor[(64, 64, 3, 3), float32] */;
+  %14 = nn.conv2d(%12, %13, padding=[1, 1, 1, 1], channels=64, kernel_size=[3, 3]) /* ty=Tensor[(1, 64, 64, 64), float32] */;
+  %15 = reshape(%tf_net/conv2d_2/BiasAdd/ReadVariableOp/resource, newshape=[1, -1, 1, 1]) /* ty=Tensor[(1, 64, 1, 1), float32] */;
+  %16 = add(%14, %15) /* ty=Tensor[(1, 64, 64, 64), float32] */;
+  %17 = nn.relu(%16) /* ty=Tensor[(1, 64, 64, 64), float32] */;
+  %18 = transpose(%tf_net/conv2d_3/Conv2D/ReadVariableOp/resource, axes=[3, 2, 0, 1]) /* ty=Tensor[(64, 64, 3, 3), float32] */;
+  %19 = nn.conv2d(%17, %18, padding=[1, 1, 1, 1], channels=64, kernel_size=[3, 3]) /* ty=Tensor[(1, 64, 64, 64), float32] */;
+  %20 = reshape(%tf_net/conv2d_3/BiasAdd/ReadVariableOp/resource, newshape=[1, -1, 1, 1]) /* ty=Tensor[(1, 64, 1, 1), float32] */;
+  %21 = add(%19, %20) /* ty=Tensor[(1, 64, 64, 64), float32] */;
+  %22 = nn.relu(%21) /* ty=Tensor[(1, 64, 64, 64), float32] */;
+  %23 = transpose(%22, axes=[0, 2, 3, 1]) /* ty=Tensor[(1, 64, 64, 64), float32] */;
+  %24 = image.resize(%23, size=[128, 128], layout="NHWC", method="nearest_neighbor", coordinate_transformation_mode="asymmetric") /* ty=Tensor[(1, 128, 128, 64), float32] */;
+  %25 = transpose(%24, axes=[0, 3, 1, 2]) /* ty=Tensor[(1, 64, 128, 128), float32] */;
+  %26 = transpose(%tf_net/conv2d_4/Conv2D/ReadVariableOp/resource, axes=[3, 2, 0, 1]) /* ty=Tensor[(3, 64, 3, 3), float32] */;
+  %27 = nn.conv2d(%25, %26, padding=[1, 1, 1, 1], channels=3, kernel_size=[3, 3]) /* ty=Tensor[(1, 3, 128, 128), float32] */;
+  %28 = reshape(%tf_net/conv2d_4/BiasAdd/ReadVariableOp/resource, newshape=[1, -1, 1, 1]) /* ty=Tensor[(1, 3, 1, 1), float32] */;
+  %29 = add(%27, %28) /* ty=Tensor[(1, 3, 128, 128), float32] */;
+  %30 = nn.relu(%29) /* ty=Tensor[(1, 3, 128, 128), float32] */;
+  add(%2, %30) /* ty=Tensor[(1, 3, 128, 128), float32] */
+}

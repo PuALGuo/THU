@@ -1,0 +1,315 @@
+[
+    {
+        "name": "up0",
+        "operation": "upsample",
+        "mode": "nearest",
+        "upsample_size": 2,
+        "input_log2scale": 7,
+        "output_log2scale": 7,
+        "input_channel_num": 3,
+        "output_channel_num": 3,
+        "input_size": {
+          "height": 64,
+          "width": 64
+        },
+        "output_size": {
+          "height": 128,
+          "width": 128
+        },
+        "input_dtype": "int8",
+        "output_dtype": "int8",
+        "previous_layer": [
+          "input"
+        ],
+        "next_layer": [
+          "add0"
+        ]
+    },
+    {
+        "name": "conv0",
+        "operation": "conv",
+        "activation_type": "Relu",
+        "input_log2scale": 7,
+        "weight_log2scale": 7,
+        "bias_log2scale": 9,
+        "output_log2scale": 7,
+        "output_shift": 7,
+        "bias_shift": 5,
+        "load_bias": true,
+        "input_channel_num": 3,
+        "output_channel_num": 64,
+        "input_size": {
+          "height": 64,
+          "width": 64
+        },
+        "padding": {
+          "top": 1,
+          "bottom": 1,
+          "left": 1,
+          "right": 1
+        },
+        "stride": {
+          "height": 1,
+          "width": 1
+        },
+        "kernel_size": {
+          "height": 3,
+          "width": 3
+        },
+        "output_size": {
+          "height": 64,
+          "width": 64
+        },
+        "input_dtype": "int8",
+        "output_dtype": "int8",
+        "weight_dtype": "int8",
+        "bias_dtype": "int8",
+        "previous_layer": [
+          "input"
+        ],
+        "next_layer": [
+          "conv1"
+        ]
+    },
+    {
+        "name": "conv1",
+        "operation": "conv",
+        "activation_type": "Relu",
+        "input_log2scale": 7,
+        "weight_log2scale": 8,
+        "bias_log2scale": 10,
+        "output_log2scale": 7,
+        "output_shift": 8,
+        "bias_shift": 5,
+        "load_bias": true,
+        "input_channel_num": 64,
+        "output_channel_num": 64,
+        "input_size": {
+          "height": 64,
+          "width": 64
+        },
+        "padding": {
+          "top": 1,
+          "bottom": 1,
+          "left": 1,
+          "right": 1
+        },
+        "stride": {
+          "height": 1,
+          "width": 1
+        },
+        "kernel_size": {
+          "height": 3,
+          "width": 3
+        },
+        "output_size": {
+          "height": 64,
+          "width": 64
+        },
+        "input_dtype": "int8",
+        "output_dtype": "int8",
+        "weight_dtype": "int8",
+        "bias_dtype": "int8",
+        "previous_layer": [
+          "conv0"
+        ],
+        "next_layer": [
+          "conv2"
+        ]
+    },
+    {
+      "name": "conv2",
+      "operation": "conv",
+      "activation_type": "Relu",
+      "input_log2scale": 7,
+      "weight_log2scale": 7,
+      "bias_log2scale": 10,
+      "output_log2scale": 7,
+      "output_shift": 7,
+      "bias_shift": 4,
+      "load_bias": true,
+      "input_channel_num": 64,
+      "output_channel_num": 64,
+      "input_size": {
+        "height": 64,
+        "width": 64
+      },
+      "padding": {
+        "top": 1,
+        "bottom": 1,
+        "left": 1,
+        "right": 1
+      },
+      "stride": {
+        "height": 1,
+        "width": 1
+      },
+      "kernel_size": {
+        "height": 3,
+        "width": 3
+      },
+      "output_size": {
+        "height": 64,
+        "width": 64
+      },
+      "input_dtype": "int8",
+      "output_dtype": "int8",
+      "weight_dtype": "int8",
+      "bias_dtype": "int8",
+      "previous_layer": [
+        "conv1"
+      ],
+      "next_layer": [
+        "conv3"
+      ]
+  },
+    {
+        "name": "conv3",
+        "operation": "conv",
+        "activation_type": "Relu",
+        "input_log2scale": 7,
+        "weight_log2scale": 7,
+        "bias_log2scale": 10,
+        "output_log2scale": 5,
+        "output_shift": 9,
+        "bias_shift": 4,
+        "load_bias": true,
+        "input_channel_num": 64,
+        "output_channel_num": 64,
+        "input_size": {
+          "height": 64,
+          "width": 64
+        },
+        "padding": {
+          "top": 1,
+          "bottom": 1,
+          "left": 1,
+          "right": 1
+        },
+        "stride": {
+          "height": 1,
+          "width": 1
+        },
+        "kernel_size": {
+          "height": 3,
+          "width": 3
+        },
+        "output_size": {
+          "height": 64,
+          "width": 64
+        },
+        "input_dtype": "int8",
+        "output_dtype": "int8",
+        "weight_dtype": "int8",
+        "bias_dtype": "int8",
+        "previous_layer": [
+          "conv2"
+        ],
+        "next_layer": [
+          "up1"
+        ]
+    },
+
+    {
+      "name": "up1",
+      "operation": "upsample",
+      "mode": "nearest",
+      "upsample_size": 2,
+      "input_log2scale": 5,
+      "output_log2scale": 5,
+      "input_channel_num": 64,
+      "output_channel_num": 64,
+      "input_size": {
+        "height": 64,
+        "width": 64
+      },
+      "output_size": {
+        "height": 128,
+        "width": 128
+      },
+      "input_dtype": "int8",
+      "output_dtype": "int8",
+      "previous_layer": [
+        "conv3"
+      ],
+      "next_layer": [
+        "conv4"
+      ]
+  },
+
+      {
+        "name": "conv4",
+        "operation": "conv",
+        "activation_type": "None",
+        "input_log2scale": 5,
+        "weight_log2scale": 8,
+        "bias_log2scale": 14,
+        "output_log2scale": 9,
+        "output_shift": 4,
+        "bias_shift": 4,
+        "load_bias": true,
+        "input_channel_num": 64,
+        "output_channel_num": 3,
+        "input_size": {
+          "height": 128,
+          "width": 128
+        },
+        "padding": {
+          "top": 1,
+          "bottom": 1,
+          "left": 1,
+          "right": 1
+        },
+        "stride": {
+          "height": 1,
+          "width": 1
+        },
+        "kernel_size": {
+          "height": 3,
+          "width": 3
+        },
+        "output_size": {
+          "height": 128,
+          "width": 128
+        },
+        "input_dtype": "int8",
+        "output_dtype": "int8",
+        "weight_dtype": "int8",
+        "bias_dtype": "int8",
+        "previous_layer": [
+          "up1"
+        ],
+        "next_layer": [
+          "add0"
+        ]
+    },
+
+    {
+        "name": "add0",
+        "operation": "add",
+        "activation_type": "None",
+        "input_channel_num": 3,
+        "input_size": {
+          "height": 128,
+          "width": 128
+        },
+        "dtype": "int8",
+        "pl_log2scale": 7,
+        "pl_shiftbit": 2,
+        "add_log2scale": 9,
+        "add_shiftbit": 0,
+        "output_log2scale": 6,
+        "output_shift_bit": 3,
+        "pl_name": "up0",
+        "add_name": "conv4",
+        "previous_layer": [
+          "up0",
+          "conv4"
+        ],
+        "next_layer": [
+          "endpoint"
+        ]
+    }
+
+
+]
