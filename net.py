@@ -29,7 +29,7 @@ class TorchNet(nn.Module):
         x0 = self.relu(x0)
         x0 = self.up1(x0)
         x0 = self.conv4(x0)
-        x0 = self.relu(x0)
+        # x0 = self.relu(x0)
         out = x1 + x0
 
         return out
@@ -47,7 +47,7 @@ class TFNet(Model):
         self.conv1 = Conv2D(64, 3, padding='same', activation='relu', data_format='channels_first')
         self.conv2 = Conv2D(64, 3, padding='same', activation='relu', data_format='channels_first')
         self.conv3 = Conv2D(64, 3, padding='same', activation='relu', data_format='channels_first')
-        self.conv4 = Conv2D(3, 3, padding='same', activation='relu', data_format='channels_first')
+        self.conv4 = Conv2D(3, 3, padding='same', activation=None, data_format='channels_first')
 
         self.up0 = UpSampling2D(size=(2,2), interpolation='nearest', data_format='channels_first')
         self.up1 = UpSampling2D(size=(2,2), interpolation='nearest', data_format='channels_first')

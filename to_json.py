@@ -43,7 +43,7 @@ class Graph(object):
     op_map = {
         
         ## general
-        "image.resize":"upsample",
+        "image.resize":"up",
         "nn.conv2d":"conv2d",
         "nn.bias_add":"add",
         "nn.relu":"relu",
@@ -114,9 +114,9 @@ class Graph(object):
                 "add_shiftbit": 0,
                 "output_log2scale": 6,
                 "output_shift_bit": 3,
-                "previous_layer": [
-                  "input"
-                ],
+                # "previous_layer": [
+                #   "input"
+                # ],
                 "next_layer": [
                   "endpoint"
                 ]
@@ -142,6 +142,7 @@ class Graph(object):
                 if self.nodes_map[inp]["next_layer"][0] == "endpoint":
                     self.nodes_map[inp]["next_layer"] = []
                 self.nodes_map[inp]["next_layer"].append(node_info["name"])
+            node_info["previous_layer"] = list(set(node_info["previous_layer"]))
             node.setinfo(node_info)
             
             return node
@@ -153,7 +154,7 @@ class Graph(object):
         self.nodes_map[num] = node
         node_info = {
             "name":op + str(len(self.op_count[op])-1),
-            "operation":op
+            "operation":"upsample"
             }
         default_info = {
             "input_log2scale": 7,
@@ -192,6 +193,7 @@ class Graph(object):
             if self.nodes_map[inp]["next_layer"][0] == "endpoint":
                 self.nodes_map[inp]["next_layer"] = []
             self.nodes_map[inp]["next_layer"].append(node_info["name"])
+        node_info["previous_layer"] = list(set(node_info["previous_layer"]))
         node_info["mode"] = {
             '"nearest_neighbor"' : "nearest"
         }.get(options_2["method"], None) ## 欸 我这边None的位置写个func是可以被调用的，但assert(0)不行，但用func包起来就可以 
@@ -259,6 +261,7 @@ class Graph(object):
             if self.nodes_map[inp]["next_layer"][0] == "endpoint":
                 self.nodes_map[inp]["next_layer"] = []
             self.nodes_map[inp]["next_layer"].append(node_info["name"])
+        node_info["previous_layer"] = list(set(node_info["previous_layer"]))
         ##
         padding = options_1["padding"]
         padding = padding[padding.find("[")+1:padding.find("]")].split(", ")
@@ -356,7 +359,7 @@ class Graph(object):
             node = self.relu(op, num, inputs, options_1, options_2, outputs)
         elif op == "add":
             node = self.add(op, num, inputs, options_1, options_2, outputs)
-        elif op == "upsample":
+        elif op == "up":
             node = self.upsample(op, num, inputs, options_1, options_2, outputs)
         elif op == "conv2d":
             op = "conv"
