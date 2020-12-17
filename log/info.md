@@ -6,7 +6,12 @@
 
 ### 框架支持
 *框架的api支持*
-  
+1. Sequential
+Sequential构建的是动态图，即命令式编程形式，类似于pytorch的那种形式，可以用命令行交互的进行调试而不用先构建完整的图，同时可以输入变量而不是用符号（指的是tf那种placeholder的形式）进行调试
+2. HybridSequential
+实际上应该是HybridSequential和HybridBlock，这是TVM支持的模式。其可以进行命令式和符号式的混合，可以在动态图和静态图之间转换，使用者可以先用imperatvie的方式写网络，debug，最后跑通网络之后，如果网络是一个静态图结构，就可以用net.hybridize()的方式将其转换成静态图，众所周知静态图的运算会比动态图快，所以这是Gluon比PyTorch更好的地方。
+3. 一点题外话
+从这里就可以很明显的看出，TVM实际上支持的是静态图的转化，因为网络的识别和提取只需要通过访问静态图得到而不用去识别模型架构本身，从而绕过了框架的差异性进行通用化表达。
 ### TVM支持
 *TVM内部的api支持*
 + relay.frontend.from_mxnet
@@ -30,6 +35,7 @@
     + _subgraph_ops = _control_flow_ops + _qnn_subgraph_ops
     + _params_ops = ['_contrib_quantized_ring_buffer']
 
+## 
 # 额外内容
 
 ## TVM和THU的IR对比
