@@ -33,7 +33,7 @@ def test_TF():
     '''
     TVM不支持直接读取tf模型，需要将模型转化成frozen_model
     有点类似于动态模型转化成静态模型的感觉
-    代码是网上抄的，所以我不知道有原理
+    代码是网上抄的，所以我不知道原理
     '''
     full_model = tf.function(lambda Input: model(Input))
     full_model = full_model.get_concrete_function(
